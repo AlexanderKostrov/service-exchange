@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Http\Services\API\AuthService;
 use Illuminate\Http\Request;
 use App\Http\Controllers\API\BaseController as BaseController;
 use App\User;
@@ -11,6 +12,13 @@ use Validator;
 
 class AuthController extends BaseController
 {
+    protected $authService;
+
+    public function __construct(AuthService $authService)
+    {
+        $this->authService = $authService;
+    }
+
     /**
      * Register api
      *
@@ -29,11 +37,7 @@ class AuthController extends BaseController
             return $this->sendError('Validation Error.', $validator->errors());
         }
 
-        $input = $request->all();
-        $input['password'] = bcrypt($input['password']);
-        $user = User::create($input);
-        $success['token'] =  $user->createToken('MyApp')->accessToken;
-        $success['name'] =  $user->name;
+        $success = $this->authService->register($request);
 
         return $this->sendResponse($success, 'User register successfully.');
     }
