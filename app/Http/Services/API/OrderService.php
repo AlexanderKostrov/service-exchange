@@ -26,13 +26,11 @@ class OrderService
     {
         $order = Order::findOrFail($id);
 
-        if (!$order) {
-            return 'error';
-        }
-
         $order->update(['status' => 'done']);
 
-        $bid = Bid::where('order_id', $id)->update(['status' => 'done']);
+        $bid = Bid::where('order_id', $id)->firstOrFail();
+
+        $bid->update(['status' => 'done']);
 
         return 'success';
     }

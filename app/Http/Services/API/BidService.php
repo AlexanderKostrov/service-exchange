@@ -33,6 +33,8 @@ class BidService
 
         $bid->update(['status' => 'work']);
 
-        $order = Order::where('id', $bid->order_id)->update(['status' => 'work']);
+        $order = Order::where('id', $bid->order_id)->firstOrFail();
+
+        $order->update(['status' => 'work']);
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Bid;
+use App\Http\Requests\OrderCreateRequest;
 use App\Http\Services\API\OrderService;
 use App\Order;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -18,7 +19,7 @@ class OrderController extends BaseController
         $this->orderService = $orderService;
     }
 
-    public function create(Request $request)
+    public function create(OrderCreateRequest $request)
     {
         $order = $this->orderService->create($request);
 
@@ -31,10 +32,6 @@ class OrderController extends BaseController
             $result = $this->orderService->done($id);
         } catch (ModelNotFoundException $exception) {
             return $this->sendError($exception->getMessage());
-        }
-
-        if ($result == 'error') {
-            return $this->sendError('Order not exist !');
         }
 
         return $this->sendResponse([], 'Order and Bid done !');
