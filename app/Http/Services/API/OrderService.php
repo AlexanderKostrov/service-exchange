@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Http\Services\API;
-
 
 use App\Bid;
 use App\Order;
@@ -26,11 +24,11 @@ class OrderService
     {
         $order = Order::findOrFail($id);
 
-        $order->update(['status' => 'done']);
+        StatusService::changeStatus($order, 'done');
 
         $bid = Bid::where('order_id', $id)->firstOrFail();
 
-        $bid->update(['status' => 'done']);
+        StatusService::changeStatus($bid, 'done');
 
         return 'success';
     }

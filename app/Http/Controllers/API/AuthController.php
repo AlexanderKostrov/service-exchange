@@ -6,11 +6,7 @@ use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
 use App\Http\Services\API\AuthService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Http\Request;
 use App\Http\Controllers\API\BaseController as BaseController;
-use App\User;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 use Validator;
 
 class AuthController extends BaseController
@@ -26,7 +22,7 @@ class AuthController extends BaseController
      * Register api
      *
      * @param RegisterRequest $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function register(RegisterRequest $request)
     {
@@ -38,10 +34,11 @@ class AuthController extends BaseController
     public function login (LoginRequest $request)
     {
         try {
-            $this->authService->login($request);
+            $result = $this->authService->login($request);
         } catch (ModelNotFoundException $exception) {
             return $this->sendError($exception->getMessage());
         }
 
+        return response($result['response'], $result['code']);
     }
 }

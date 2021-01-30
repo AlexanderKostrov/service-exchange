@@ -28,14 +28,14 @@ class AuthService
             if (Hash::check($request->password, $user->password)) {
                 $token = $user->createToken('Laravel Password Grant Client')->accessToken;
                 $response = ['token' => $token];
-                return response($response, 200);
+                return (['response' => $response, 'code' => 200]);
             } else {
                 $response = ["message" => "Password mismatch"];
-                return response($response, 422);
+                return (['response' => $response, 'code' => 422]);
             }
         } else {
             $response = ["message" =>'User does not exist'];
-            return response($response, 422);
+            return (['response' => $response, 'code' => 422]);
         }
     }
 }

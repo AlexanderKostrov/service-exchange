@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Http\Services\API;
-
 
 use App\Bid;
 use App\Order;
@@ -22,7 +20,7 @@ class BidService
             return 'exists';
         }
 
-        $bid = Bid::create(['order_id' => $id, 'user_id' => Auth::id(), 'status' => 'wait']);   ///// status
+        $bid = Bid::create(['order_id' => $id, 'user_id' => Auth::id()]);
 
         return $bid;
     }
@@ -31,10 +29,10 @@ class BidService
     {
         $bid = Bid::findOrFail($id);
 
-        $bid->update(['status' => 'work']);
+        StatusService::changeStatus($bid, 'work');
 
         $order = Order::where('id', $bid->order_id)->firstOrFail();
 
-        $order->update(['status' => 'work']);
+        StatusService::changeStatus($order, 'work');
     }
 }

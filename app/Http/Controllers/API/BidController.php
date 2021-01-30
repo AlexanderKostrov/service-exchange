@@ -2,12 +2,8 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Bid;
 use App\Http\Services\API\BidService;
-use App\Order;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class BidController extends BaseController
 {
