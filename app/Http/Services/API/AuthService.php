@@ -1,19 +1,26 @@
 <?php
 
-
 namespace App\Http\Services\API;
 
-
-use App\User;
+use App\Http\Repository\UserRepository;
 use Illuminate\Support\Facades\Hash;
 
 class AuthService
 {
+    protected $users;
+
+    public function __construct(UserRepository $users)
+    {
+        $this->users = $users;
+    }
+
     public function register($request)
     {
         $input = $request->all();
         $input['password'] = bcrypt($input['password']);
-        $user = User::create($input);
+
+        $user = $this->users->create($input);
+
         $success['token'] =  $user->createToken('MyApp')->accessToken;
         $success['name'] =  $user->name;
 
@@ -22,7 +29,7 @@ class AuthService
 
     public function login($request)
     {
-        $user = User::where('email', $request->email)->firstOrFail();
+        $user = $this->users->findByEmail($request->email);
 
         if ($user) {
             if (Hash::check($request->password, $user->password)) {

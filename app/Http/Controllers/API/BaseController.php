@@ -26,6 +26,9 @@ class BaseController extends Controller
     /**
      * return error response.
      *
+     * @param $error
+     * @param array $errorMessages
+     * @param int $code
      * @return \Illuminate\Http\JsonResponse
      */
     public function sendError($error, $errorMessages = [], $code = 404)
